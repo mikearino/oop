@@ -1,35 +1,36 @@
-class User {
-  constructor(email, name) {
-    this.email = email;
-    this.name = name;
-    this.score = 0;
-  }
-  login() {
-    console.log(this.email, "just logged in");
-    return this;
-  }
-  logout() {
-    console.log(this.email, "just logged out");
-    return this;
-  }
-  updateScore() {
-    this.score++;
-    console.log(this.email, this.name, "score is now", this.score);
-    return this;
-  }
+function User(email, name) {
+  this.email = email;
+  this.name = name;
+  this.online = false;
 }
 
-class Admin extends User {
-  deleteUser(user) {
-    users = users.filter(u => {
-      return u.email != user.email;
-    });
-  }
+User.prototype.login = function() {
+  this.online = true;
+  console.log(this.email, "has logged in");
+};
+
+User.prototype.logout = function() {
+  this.online = false;
+  console.log(this.email, "has logged out");
+};
+
+function Admin(...args) {
+  User.apply(this, args);
+  this.role = "super admin";
 }
+
+Admin.prototype = Object.create(User.prototype);
+
+Admin.prototype.deleteUser = function(u) {
+  users = users.filter(user => {
+    return user.email != u.email;
+  });
+};
 
 var userOne = new User("ryu@ninja.com", "Ryu");
 var userTwo = new User("Yoshi@marioKorp.com", "Yoshi");
-var admin = new Admin("peach@marioKart", "Peach");
+var admin = new Admin("shaun@ninja.com", "shaun");
+
 var users = [userOne, userTwo, admin];
 
-console.log(users);
+console.log(admin);
